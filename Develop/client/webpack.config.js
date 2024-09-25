@@ -4,9 +4,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 const { InjectManifest } = require('workbox-webpack-plugin');
 
-module.exports = () => {
+module.exports = (env, argv) => {
+  const isProduction = argv.mode === 'production';
+
   return {
-    mode: 'development',
+    mode: isProduction ? 'production' : 'development',
     entry: {
       main: './src/js/index.js',
       install: './src/js/install.js',
@@ -14,16 +16,19 @@ module.exports = () => {
     output: {
       filename: '[name].bundle.js',
       path: path.resolve(__dirname, 'dist'),
+      clean: true, // Clean the output directory before each build
     },
     plugins: [
       new HtmlWebpackPlugin({
         template: './index.html',
         title: 'Webpack Plugin',
       }),
-      new MiniCssExtractPlugin(),
+      new MiniCssExtractPlugin({
+        filename: '[name].css', // Specify the output filename for CSS
+      }),
       new InjectManifest({
-        swSrc: './src/sw.js',
-        swDest: 'service-worker.js',
+        swSrc: './src-sw.js',
+        swDest: 'src-sw.js',
       }),
       new WebpackPwaManifest({
         name: 'Your App Name',
@@ -35,11 +40,11 @@ module.exports = () => {
         orientation: 'portrait',
         start_url: '.',
         publicPath: '/',
-        icons: [
+        logos: [
           {
-            src: path.resolve('src/images/icon.png'), // Path to your icon
+            src: path.resolve('src/images/logo.png'), // Path to your icon
             sizes: [96, 128, 192, 256, 384, 512], // Icon sizes
-            destination: path.join('icons'), // Destination folder for icons
+            destination: path.join('logos'), // Destination folder for icons
           },
         ],
       }),
@@ -67,5 +72,6 @@ module.exports = () => {
         },
       ],
     },
+    devtool: isProduction ? false : 'source-map', // Enable source maps in development mode
   };
 };

@@ -1,0 +1,24 @@
+{
+  "name": "Your App Name",
+  "short_name": "App",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": ".",
+  "description": "A description of your app",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "logos": [
+    {
+      "src": "/Users/markparish/Desktop/bootcamp/PWA_text_editor/Develop/client/src/images/logo.png",
+      "sizes": [
+        96,
+        128,
+        192,
+        256,
+        384,
+        512
+      ],
+      "destination": "logos"
+    }
+  ]
+}
